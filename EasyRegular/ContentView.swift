@@ -9,17 +9,58 @@
 import SwiftUI
 
 struct ContentView : View {
+    
+    @EnvironmentObject var inputData: InputData
+    
     var body: some View {
-        Text("Hello World")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        VStack {
+            HStack(spacing: 5) {
+                Text("Easy Regular")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.accentColor)
+                
+                Spacer()
+            }
+            
+            Section(header: HStack {
+                Text("Pattern:")
+                    .font(.title)
+                    .foregroundColor(.accentColor)
+                Spacer()
+            }) {
+                PatternView(size: NSSize(width: 800, height: 100))
+                    .onChanged { (string) in
+                        self.inputData.pattern.string = string
+                    }
+            }
+            
+            Section(header: HStack {
+                Text("Text:")
+                    .font(.title)
+                    .foregroundColor(.accentColor)
+                Spacer()
+            }) {
+                TextView(pattern: inputData.$pattern, size: NSSize(width: 800, height: 100))
+            }
+            
+            OptionsView()
+            
+            MatchingOptionsView()
+            
+        }
+        .frame(minHeight: 700)
+        .padding()
+        .padding(.bottom, 20)
     }
+    
+    
 }
-
 
 #if DEBUG
 struct ContentView_Previews : PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().environmentObject(InputData())
     }
 }
 #endif
